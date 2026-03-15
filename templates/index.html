@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>موقع راحة - Raha</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root { --primary: #00d2ff; --soft-glow: rgba(0, 210, 255, 0.15); }
+        body, html { margin: 0; padding: 0; width: 100%; height: 100%; font-family: 'Cairo', sans-serif; overflow: hidden; background: #000; color: white; }
+
+        #intro-video { position: fixed; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 100; transition: opacity 1s; }
+
+        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 101; background: rgba(0,0,0,0.6); transition: 0.6s; }
+        .hidden { display: none !important; }
+
+        .card { background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(20px); padding: 40px 20px; border-radius: 30px; border: 1px solid rgba(255,255,255,0.1); text-align: center; width: 85%; max-width: 400px; animation: slideUp 0.5s ease; }
+        input { width: 85%; padding: 15px; margin: 20px 0; border-radius: 15px; border: 1px solid var(--primary); background: rgba(0,0,0,0.4); color: white; text-align: center; outline: none; font-size: 16px; }
+        .btn { padding: 12px 40px; border-radius: 50px; border: none; background: var(--primary); color: black; font-weight: bold; cursor: pointer; transition: 0.3s; font-size: 18px; }
+        .btn:hover { transform: scale(1.05); box-shadow: 0 0 20px var(--primary); }
+
+        #main-ui { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: url('https://d.top4top.io/p_37268lxgk1.jpg') no-repeat center center fixed; background-size: cover; display: none; flex-direction: column; align-items: center; justify-content: center; z-index: 50; }
+        .chat-container { width: 90%; max-width: 450px; height: 75vh; background: rgba(0,0,0,0.4); backdrop-filter: blur(25px); border-radius: 30px; border: 1px solid rgba(255,255,255,0.1); display: flex; flex-direction: column; }
+        .chat-messages { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 12px; }
+        
+        .msg { padding: 12px 18px; border-radius: 20px; max-width: 80%; font-size: 15px; line-height: 1.6; animation: fadeIn 0.3s ease; }
+        .bot { background: var(--soft-glow); border: 1px solid rgba(0,210,255,0.2); align-self: flex-start; }
+        .user { background: rgba(255,255,255,0.1); align-self: flex-end; }
+
+        .chat-input { padding: 15px; display: flex; gap: 10px; background: rgba(0,0,0,0.2); border-radius: 0 0 30px 30px; }
+        
+        .social { position: absolute; bottom: 20px; display: flex; gap: 25px; }
+        .insta { color: #E1306C; filter: drop-shadow(0 0 5px #E1306C); font-size: 30px; }
+        .whatsapp { color: #25D366; filter: drop-shadow(0 0 5px #25D366); font-size: 30px; }
+
+        @keyframes slideUp { from { transform: translateY(40px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+    </style>
+</head>
+<body>
+
+    <video id="intro-video" autoplay muted loop playsinline><source src="https://c.top4top.io/m_3726ek1bq0.mp4"></video>
+
+    <div id="step-start" class="overlay">
+        <h1 style="letter-spacing: 5px; text-shadow: 0 0 20px var(--primary);">R A H A</h1>
+        <button class="btn" onclick="goToName()">ابدأ رحلتك</button>
+    </div>
+
+    <div id="step-name" class="overlay hidden">
+        <div class="card">
+            <h2 style="margin:0;">مرحباً بك</h2>
+            <p>ممكن نعرف اسمك؟</p>
+            <input type="text" id="name-input" placeholder="اكتب اسمك هنا">
+            <br>
+            <button class="btn" onclick="goToAge()">التالي</button>
+        </div>
+    </div>
+
+    <div id="step-age" class="overlay hidden">
+        <div class="card">
+            <h2>خطوة أخيرة</h2>
+            <p>عندك كام سنة؟</p>
+            <input type="number" id="age-input" placeholder="اكتب سنك">
+            <br>
+            <button class="btn" onclick="openChat()">دخول</button>
+        </div>
+    </div>
+
+    <div id="main-ui">
+        <div class="chat-container">
+            <div style="padding:15px; text-align:center; color:var(--primary); font-weight:bold; border-bottom:1px solid rgba(255,255,255,0.1)">موقع راحة النفسي</div>
+            <div id="chat-messages" class="chat-messages"></div>
+            <div class="chat-input">
+                <input type="text" id="user-input" style="margin:0; width:100%;" placeholder="فضفض براحتك...">
+                <button onclick="sendMessage()" style="background:var(--primary); border:none; padding:10px 20px; border-radius:15px; cursor:pointer;"><i class="fas fa-paper-plane"></i></button>
+            </div>
+        </div>
+        <p style="margin-top:15px; font-weight:bold; font-size:14px;">Abdul Rahman Ahmed © 2026</p>
+        <div class="social">
+            <a href="https://www.instagram.com/w.gza?utm_source=qr&igsh=MWhibXl2MGh5ZGY3bw==" target="_blank" class="insta"><i class="fab fa-instagram"></i></a>
+            <a href="https://wa.me/qr/GH6YWQHK3E2JI1" target="_blank" class="whatsapp"><i class="fab fa-whatsapp"></i></a>
+        </div>
+    </div>
+
+    <audio id="tick-sound" src="/static/click.wav" preload="auto"></audio>
+
+    <script>
+        let userName = ""; let userAge = "";
+        const sound = document.getElementById('tick-sound');
+
+        function playTick() { 
+            sound.currentTime = 0; 
+            sound.play().catch(e => console.log("الصوت محتاج ضغطة أولاً")); 
+        }
+
+        function goToName() { playTick(); document.getElementById('step-start').classList.add('hidden'); document.getElementById('step-name').classList.remove('hidden'); }
+        function goToAge() { userName = document.getElementById('name-input').value; if(!userName) return; playTick(); document.getElementById('step-name').classList.add('hidden'); document.getElementById('step-age').classList.remove('hidden'); }
+        function openChat() { 
+            userAge = document.getElementById('age-input').value; if(!userAge) return; 
+            playTick(); document.getElementById('intro-video').style.opacity = '0'; document.getElementById('step-age').classList.add('hidden');
+            setTimeout(() => { document.getElementById('intro-video').style.display = 'none'; document.getElementById('main-ui').style.display = 'flex'; addMessage("bot", `أهلاً بك يا ${userName}.. أنا موقع راحة، مساحتك الآمنة. احكيلي إيه اللي تعبك؟`); }, 800);
+        }
+
+        function addMessage(type, text) {
+            playTick();
+            const chat = document.getElementById('chat-messages');
+            const div = document.createElement('div');
+            div.className = `msg ${type}`;
+            div.innerText = text;
+            chat.appendChild(div);
+            chat.scrollTop = chat.scrollHeight;
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('user-input');
+            const text = input.value.trim();
+            if(!text) return;
+            addMessage("user", text);
+            input.value = "";
+            fetch('/ask', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({name: userName, age: userAge, message: text})
+            }).then(res => res.json()).then(data => addMessage("bot", data.reply));
+        }
+        document.getElementById("user-input").addEventListener("keyup", (e) => { if(e.keyCode===13) sendMessage(); });
+    </script>
+</body>
+</html>
