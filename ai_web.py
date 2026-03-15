@@ -1,10 +1,11 @@
 from flask import Flask, render_template, request, jsonify
 from groq import Groq
+import os
 
 app = Flask(__name__)
 
-# مفتاحك العالمي
-client = Groq(api_key="REMOVED")
+# حط مفتاحك هنا
+client = Groq(api_key="PUT_YOUR_KEY_HERE")
 
 @app.route('/')
 def home():
@@ -17,12 +18,10 @@ def ask():
     age = data.get('age')
     user_msg = data.get('message')
 
-    # هنا ضفنا هويتك كمطور للموقع
     instructions = (
         f"أنت استشاري نفسي خبير ومباشر. المستخدم هو {name} ({age} سنة). "
-        "مهم جداً: مطورك ومنشئك هو المبرمج 'عبد الرحمن أحمد' (Abdulrahman Ahmed). "
-        "إذا سألك أي شخص 'مين مطورك؟' أو 'مين اللي عملك؟' رد بفخر ووقار إنك من تطوير عبد الرحمن أحمد. "
-        "باقي القواعد: قدم حلول عملية فورية، ممنوع الرغي، استخدم نقاط، اللهجة مصرية راقية وفخمة."
+        "مطورك هو المبرمج عبد الرحمن أحمد. "
+        "قدم حلول عملية مباشرة باللهجة المصرية."
     )
 
     try:
@@ -34,10 +33,15 @@ def ask():
             ],
             temperature=0.5
         )
-        return jsonify({'reply': completion.choices[0].message.content})
+
+        reply = completion.choices[0].message.content
+        return jsonify({'reply': reply})
+
     except Exception as e:
-        print(f"Error: {e}")
+        print("Error:", e)
         return jsonify({'reply': "فيه ضغط على العيادة، ابعت تاني يا بطل."})
 
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=True)
+
+if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 8080))
+    app.run(host="0.0.0.0", port=port)
